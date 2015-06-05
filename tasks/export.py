@@ -8,13 +8,9 @@ from os.path import dirname, abspath
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
-from pymongo import MongoClient
-
 from common.redis_client import r
+from common.mongo import HOST, PORT, DB
 
-
-client = MongoClient('mongodb://localhost:27017/')
-db = client.homework
 
 REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'
 TIMEOUT = 5
@@ -51,9 +47,9 @@ def main(arg):
 
 def mongoexport(num, ids):
     cmd = 'mongoexport --host {host} --port {port} --db {db} --collection {collection}'.format(
-        host='localhost',
-        port=27017,
-        db='homework',
+        host=HOST,
+        port=PORT,
+        db=DB,
         collection='collection%s' % num,
     )
     inputs = cmd.split()

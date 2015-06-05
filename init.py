@@ -7,10 +7,10 @@ from os.path import dirname, abspath
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
-from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 from common.redis_client import r
+from common.mongo import db
 
 REDIS_KEY_LAST_OID = 'homework/last_oid'
 REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
@@ -33,8 +33,6 @@ def main(arg):
         'collection2': [gen2(x, x+10, bool(x % 2)) for x in range(n+1, 2*n)],
     }
 
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client.homework
     db.collection1.remove({})
     db.collection2.remove({})
     for collection_name, d in cross_data.iteritems():

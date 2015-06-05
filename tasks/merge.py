@@ -7,14 +7,11 @@ from os.path import dirname, abspath
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
-from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 from common.redis_client import r
+from common.mongo import db
 
-
-client = MongoClient('mongodb://localhost:27017/')
-db = client.homework
 c1 = db.collection1
 c2 = db.collection2
 c3 = db.collection3

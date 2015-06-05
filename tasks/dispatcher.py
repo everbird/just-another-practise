@@ -8,14 +8,10 @@ PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
 from functools import wraps
-from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 from common.redis_client import r
-
-
-client = MongoClient('mongodb://localhost:27017/')
-db = client.homework
+from common.mongo import db
 
 REDIS_KEY_LAST_OID = 'homework/last_oid'
 REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
