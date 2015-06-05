@@ -16,7 +16,7 @@ REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'
 
 
 def main():
-    client = MongoClient('mongodb://localhost:10001/')
+    client = MongoClient('mongodb://localhost:27017/')
     db = client.homework
     for collection_name, d in data.iteritems():
         c = db[collection_name]

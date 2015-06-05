@@ -17,11 +17,17 @@ import redis
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
+TIMEOUT = 5
 
 
 def main():
     while True:
-        _, data = r.brpop(REDIS_KEY_TO_BE_MERGED)
+        ret = r.brpop(REDIS_KEY_TO_BE_MERGED, TIMEOUT)
+        if ret is None:
+            print 'No work to do.'
+            break
+
+        _, data = ret
         oid1 = data[:24]
         oid2 = data[24:]
         print oid1, oid2

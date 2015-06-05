@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-
+from functools import wraps
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 
-client = MongoClient('mongodb://localhost:10001/')
+client = MongoClient('mongodb://localhost:27017/')
 db = client.homework
 
 import redis
@@ -17,7 +17,23 @@ REDIS_KEY_LAST_OID = 'homework/last_oid'
 REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
 REDIS_KEY_TO_BE_EXPORTED = 'homework/collection/{}/to_be_exported'
 
+REDIS_KEY_DISPATCHER_LOCK = 'homework/dispatcher/lock'
+LOCK_EXPIRE = 60
 
+
+def check_lock(key):
+    def deco(f):
+        @wraps(f)
+        def _(*args, **kwargs):
+            if not r.get(key):
+                r.set(key, 'true', LOCK_EXPIRE)
+                ret = f(*args, **kwargs)
+                return ret
+        return _
+    return deco
+
+
+@check_lock(REDIS_KEY_DISPATCHER_LOCK)
 def main():
     c1 = db.collection1
     c2 = db.collection2

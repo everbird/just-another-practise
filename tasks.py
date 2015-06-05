@@ -8,5 +8,13 @@ app.config_from_object('celeryconfig')
 
 
 @app.task
-def add(x, y):
-    return x + y
+def scheduler():
+    import dispatcher
+    dispatcher.main()
+
+
+@app.task
+def complete_selector():
+    import to_export
+    to_export.main((None, 1))
+    to_export.main((None, 2))

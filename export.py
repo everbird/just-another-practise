@@ -7,7 +7,7 @@ import subprocess
 from pymongo import MongoClient
 
 
-client = MongoClient('mongodb://localhost:10001/')
+client = MongoClient('mongodb://localhost:27017/')
 db = client.homework
 
 import redis
@@ -36,7 +36,7 @@ def main(arg):
 def mongoexport(num, ids):
     cmd = 'mongoexport --host {host} --port {port} --db {db} --collection {collection}'.format(
         host='localhost',
-        port=10001,
+        port=27017,
         db='homework',
         collection='collection%s' % num,
     )
