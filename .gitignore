@@ -1,0 +1,12 @@
+*~
+*.swp
+*.pyc
+.ropeproject
+configs/local_config.py
+configs/redis-store.conf
+configs/supervisord.conf
+configs/logging.yaml
+configs/dev_settings.py
+run
+log
+data
