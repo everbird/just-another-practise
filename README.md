@@ -46,7 +46,7 @@ Actually it would be better if there are some test data for collection1 and coll
 ## How to Setup the Demo
 This demo dependent on mongodb, redis. Pls make sure if them have been installed.
 
-1. Clone the source code
+1. git clone https://github.com/everbird/just-another-practise.git homework
 2. cd homework. Active the virtualenv is you like.
 3. make build_env req ss
 4. make st. All the apps should be RUNNING
