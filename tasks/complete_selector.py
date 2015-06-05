@@ -4,17 +4,20 @@
 
 import sys
 
+from os.path import dirname, abspath
+PROJECT_PATH = dirname(dirname(abspath(__file__)))
+sys.path.insert(0, PROJECT_PATH)
+
 from functools import wraps
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+
+from common.redis_client import r
 
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.homework
 
-import redis
-
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 REDIS_KEY_EXPORT_LAST_OID = 'homework/to_export/collection{}/last_oid'
 REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'

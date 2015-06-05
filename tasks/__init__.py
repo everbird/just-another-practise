@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import sys
+
 from os.path import join, dirname, abspath
+PROJECT_PATH = dirname(dirname(abspath(__file__)))
+sys.path.insert(0, PROJECT_PATH)
+
 from celery import Celery
 
 app = Celery('tasks', broker='redis://localhost:6379/1')
 app.config_from_object('celeryconfig')
-PROJECT_PATH = dirname(dirname(abspath(__file__)))
 
 
 @app.task

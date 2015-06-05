@@ -1,9 +1,16 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import sys
+
+from os.path import dirname, abspath
+PROJECT_PATH = dirname(dirname(abspath(__file__)))
+sys.path.insert(0, PROJECT_PATH)
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+
+from common.redis_client import r
 
 
 client = MongoClient('mongodb://localhost:27017/')
@@ -11,10 +18,6 @@ db = client.homework
 c1 = db.collection1
 c2 = db.collection2
 c3 = db.collection3
-
-import redis
-
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
 TIMEOUT = 5

@@ -4,15 +4,17 @@
 
 import sys
 import subprocess
+from os.path import dirname, abspath
+PROJECT_PATH = dirname(dirname(abspath(__file__)))
+sys.path.insert(0, PROJECT_PATH)
+
 from pymongo import MongoClient
+
+from common.redis_client import r
 
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client.homework
-
-import redis
-
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
 
 REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'
 TIMEOUT = 5

@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
+import sys
+
+from os.path import dirname, abspath
+PROJECT_PATH = dirname(dirname(abspath(__file__)))
+sys.path.insert(0, PROJECT_PATH)
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
-import redis
-
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
+from common.redis_client import r
 
 REDIS_KEY_LAST_OID = 'homework/last_oid'
 REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
@@ -17,7 +20,19 @@ REDIS_KEY_COMPLETE_SELECTOR_LOCK = 'homework/complete_selector/lock'
 REDIS_KEY_DISPATCHER_LOCK = 'homework/dispatcher/lock'
 
 
-def main():
+def main(arg):
+    n = 1000 if len(arg) < 2 else int(arg[1])
+
+    cross_data = {
+        'collection1': [gen1(x, x, bool(x % 2)) for x in range(1, n)],
+        'collection2': [gen2(x, x, bool(x % 2)) for x in range(1, n)],
+    }
+
+    nocross_data = {
+        'collection1': [gen1(x, x-10, bool(x % 2)) for x in range(n+1, 2*n)],
+        'collection2': [gen2(x, x+10, bool(x % 2)) for x in range(n+1, 2*n)],
+    }
+
     client = MongoClient('mongodb://localhost:27017/')
     db = client.homework
     db.collection1.remove({})
@@ -75,16 +90,6 @@ def gen2(n, c1n, completed=False):
 
     return r
 
-cross_data = {
-    'collection1': [gen1(x, x, bool(x % 2)) for x in range(1, 1000)],
-    'collection2': [gen2(x, x, bool(x % 2)) for x in range(1, 1000)],
-}
-
-nocross_data = {
-    'collection1': [gen1(x, x-10, bool(x % 2)) for x in range(1001, 2000)],
-    'collection2': [gen2(x, x+10, bool(x % 2)) for x in range(1001, 2000)],
-}
-
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
