@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 
-client = MongoClient('mongodb://localhost:10001/')
+client = MongoClient('mongodb://localhost:27017/')
 db = client.homework
 c1 = db.collection1
 c2 = db.collection2

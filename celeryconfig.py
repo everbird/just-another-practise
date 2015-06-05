@@ -11,9 +11,19 @@ CELERYBEAT_SCHEDULE = {
     'check-complete': {
         'task': 'tasks.complete_selector',
         'schedule': timedelta(seconds=15),
-    }
+    },
+    'merge': {
+        'task': 'tasks.start_merge_workers',
+        'schedule': timedelta(seconds=60),
+    },
+    'export': {
+        'task': 'tasks.start_export_workers',
+        'schedule': timedelta(seconds=60),
+    },
 }
 CELERY_IMPORTS = (
     'dispatcher',
     'to_export',
+    'merge',
+    'export',
 )

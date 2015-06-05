@@ -18,7 +18,7 @@ REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
 REDIS_KEY_TO_BE_EXPORTED = 'homework/collection/{}/to_be_exported'
 
 REDIS_KEY_DISPATCHER_LOCK = 'homework/dispatcher/lock'
-LOCK_EXPIRE = 60
+LOCK_EXPIRE = 15
 
 
 def check_lock(key):
