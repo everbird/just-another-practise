@@ -22,8 +22,9 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 CELERY_IMPORTS = (
-    'dispatcher',
-    'to_export',
-    'merge',
-    'export',
+    'tasks',
+    'tasks.dispatcher',
+    'tasks.complete_selector',
+    'tasks.merge',
+    'tasks.export',
 )
