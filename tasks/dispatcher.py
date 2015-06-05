@@ -7,30 +7,13 @@ from os.path import dirname, abspath
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
-from functools import wraps
 from bson.objectid import ObjectId
 
+from consts import (REDIS_KEY_LAST_OID, REDIS_KEY_TO_BE_MERGED,
+                    REDIS_KEY_DISPATCHER_LOCK)
 from common.redis_client import r
 from common.mongo import db
-
-REDIS_KEY_LAST_OID = 'homework/last_oid'
-REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
-REDIS_KEY_TO_BE_EXPORTED = 'homework/collection/{}/to_be_exported'
-
-REDIS_KEY_DISPATCHER_LOCK = 'homework/dispatcher/lock'
-LOCK_EXPIRE = 15
-
-
-def check_lock(key):
-    def deco(f):
-        @wraps(f)
-        def _(*args, **kwargs):
-            if not r.get(key):
-                r.set(key, 'true', LOCK_EXPIRE)
-                ret = f(*args, **kwargs)
-                return ret
-        return _
-    return deco
+from common.lock import check_lock
 
 
 @check_lock(REDIS_KEY_DISPATCHER_LOCK)
@@ -45,12 +28,6 @@ def main():
             print 'dispatching...', item1['_id'], item2['_id']
             r.lpush(REDIS_KEY_TO_BE_MERGED,
                     '{}{}'.format(item1['_id'], item2['_id']))
-
-        if item1 and item1.get('completed'):
-            r.lpush(REDIS_KEY_TO_BE_EXPORTED.format(1), item1['_id'])
-
-        if item2 and item2.get('completed'):
-            r.lpush(REDIS_KEY_TO_BE_EXPORTED.format(2), item2['_id'])
 
         new_last_oid = item1['_id']
 

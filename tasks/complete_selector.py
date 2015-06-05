@@ -8,30 +8,14 @@ from os.path import dirname, abspath
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
-from functools import wraps
 from bson.objectid import ObjectId
+
+from consts import (REDIS_KEY_TO_BE_EXPORTED, REDIS_KEY_EXPORT_LAST_OID,
+                    REDIS_KEY_COMPLETE_SELECTOR_LOCK)
 
 from common.redis_client import r
 from common.mongo import db
-
-
-REDIS_KEY_EXPORT_LAST_OID = 'homework/to_export/collection{}/last_oid'
-REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'
-
-REDIS_KEY_COMPLETE_SELECTOR_LOCK = 'homework/complete_selector/lock'
-LOCK_EXPIRE = 15
-
-
-def check_lock(key):
-    def deco(f):
-        @wraps(f)
-        def _(*args, **kwargs):
-            if not r.get(key):
-                r.set(key, 'true', ex=LOCK_EXPIRE)
-                ret = f(*args, **kwargs)
-                return ret
-        return _
-    return deco
+from common.lock import check_lock
 
 
 @check_lock(REDIS_KEY_COMPLETE_SELECTOR_LOCK)

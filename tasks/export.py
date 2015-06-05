@@ -8,12 +8,9 @@ from os.path import dirname, abspath
 PROJECT_PATH = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, PROJECT_PATH)
 
+from consts import REDIS_KEY_TO_BE_EXPORTED, BRPOP_TIMEOUT
 from common.redis_client import r
 from common.mongo import HOST, PORT, DB
-
-
-REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'
-TIMEOUT = 5
 
 
 def main(arg):
@@ -24,7 +21,7 @@ def main(arg):
     print 'collection#:', n, 'path:', path
     while True:
         timeout = False
-        ret = r.brpop(REDIS_KEY_TO_BE_EXPORTED.format(n), TIMEOUT)
+        ret = r.brpop(REDIS_KEY_TO_BE_EXPORTED.format(n), BRPOP_TIMEOUT)
         if ret is None:
             timeout = True
         else:

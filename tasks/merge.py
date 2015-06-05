@@ -9,6 +9,7 @@ sys.path.insert(0, PROJECT_PATH)
 
 from bson.objectid import ObjectId
 
+from consts import REDIS_KEY_TO_BE_MERGED, BRPOP_TIMEOUT
 from common.redis_client import r
 from common.mongo import db
 
@@ -16,13 +17,10 @@ c1 = db.collection1
 c2 = db.collection2
 c3 = db.collection3
 
-REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
-TIMEOUT = 5
-
 
 def main():
     while True:
-        ret = r.brpop(REDIS_KEY_TO_BE_MERGED, TIMEOUT)
+        ret = r.brpop(REDIS_KEY_TO_BE_MERGED, BRPOP_TIMEOUT)
         if ret is None:
             print 'No work to do.'
             break

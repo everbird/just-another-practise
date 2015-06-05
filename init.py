@@ -9,15 +9,11 @@ sys.path.insert(0, PROJECT_PATH)
 
 from bson.objectid import ObjectId
 
+from consts import (REDIS_KEY_LAST_OID, REDIS_KEY_TO_BE_MERGED,
+                    REDIS_KEY_TO_BE_EXPORTED, REDIS_KEY_EXPORT_LAST_OID,
+                    REDIS_KEY_COMPLETE_SELECTOR_LOCK, REDIS_KEY_DISPATCHER_LOCK)
 from common.redis_client import r
 from common.mongo import db
-
-REDIS_KEY_LAST_OID = 'homework/last_oid'
-REDIS_KEY_TO_BE_MERGED = 'homework/to_be_merged'
-REDIS_KEY_EXPORT_LAST_OID = 'homework/to_export/collection{}/last_oid'
-REDIS_KEY_TO_BE_EXPORTED = 'homework/to_export/collection/{}/to_be_exported'
-REDIS_KEY_COMPLETE_SELECTOR_LOCK = 'homework/complete_selector/lock'
-REDIS_KEY_DISPATCHER_LOCK = 'homework/dispatcher/lock'
 
 
 def main(arg):
